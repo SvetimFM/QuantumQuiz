@@ -1,4 +1,26 @@
-import React, { useState } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Your QM Interpretation?</title>
+    <meta name="description" content="A Buzzfeed-style quiz to discover your quantum mechanics interpretation. Are you Copenhagen, Many-Worlds, QBism, Bohmian, or Relational?">
+    <meta property="og:title" content="What's Your QM Interpretation?">
+    <meta property="og:description" content="A Buzzfeed quiz for people who think about the measurement problem. 10 questions, 5 interpretations, no wrong answers (they're empirically equivalent).">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { margin: 0; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+const { useState } = React;
 
 const questions = [
   {
@@ -515,7 +537,7 @@ function shuffle(array) {
   return arr;
 }
 
-export default function QMQuiz() {
+function QMQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState({
     copenhagen: 0,
@@ -815,10 +837,7 @@ export default function QMQuiz() {
         
         <div className="flex justify-between items-center mb-6">
           <span className="text-purple-400 text-sm">
-            {simpleMode 
-              ? `Question ${currentQuestion + 1} of ${shuffledQuestions.length}`
-              : `Question ${currentQuestion + 1} of ${shuffledQuestions.length}`
-            }
+            Question {currentQuestion + 1} of {shuffledQuestions.length}
           </span>
           <div className="flex gap-1">
             {shuffledQuestions.map((_, i) => (
@@ -862,3 +881,8 @@ export default function QMQuiz() {
     </div>
   );
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(<QMQuiz />);
+    </script>
+</body>
+</html>

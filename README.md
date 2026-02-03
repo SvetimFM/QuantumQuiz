@@ -1,49 +1,69 @@
-# QuantumQuiz
-What kind of QM interpretation are you, through 10 simple questions
+# What's Your QM Interpretation?
 
-QQ is a quiz that's genuinely discriminating on the philosophical axes that actually differentiate interpretations:
-The five categories used:
+A Buzzfeed-style quiz to discover your quantum mechanics interpretation.
 
-Copenhagen — pragmatist, anti-metaphysical, "prediction is enough"
-Many-Worlds — systematizer, bullet-biter, ontological extravagance for elegance
-QBism — agent-centric, Bayesian, states are beliefs
-Bohmian — determinism-preserver, wants clear ontology, pays non-locality cost
-Relational QM — no absolute facts, reality is interactions, process-oriented
+**[Take the quiz →](https://svetimfm.github.io/qm-interpretation-quiz/)**
 
-Axes the questions probe:
+## About
 
-Pragmatism vs. realism
-Comfort with indeterminism
-Observer-dependence tolerance
-Ontological parsimony preferences
-Locality intuitions
-Realism vs. instrumentalism
-Comfort with indeterminism
-Observer-dependence tolerance
-Ontological parsimony preferences
-How you handle paradox
+Quantum mechanics works. The math predicts experimental outcomes with extraordinary precision. But what does it *mean*?
 
-5 interpretations:
+Does the wavefunction describe reality, or just our knowledge? Does measurement create outcomes, reveal them, or branch the universe? Is randomness fundamental or just ignorance?
 
-🔬 Copenhagen — "shut up and calculate"
-🌳 Many-Worlds — bullet-biting systematizers
-🎯 QBism — beliefs all the way down
-🧭 Bohmian — determinism preserved at a cost
-🔗 Relational QM — no view from nowhere
+Physicists disagree. Philosophers disagree. This quiz won't settle it — but it might help you find your people.
 
-Results include:
+## The Five Interpretations
 
-The vibe (what you actually believe)
-Why this works (steel-man the position)
-The tensions (honest about the problems)
-Your people (who to read)
-You might also like (philosophical adjacent)
-Score distribution across all five
-Runner-up interpretation
+| | Interpretation | Tagline |
+|---|---|---|
+| 🔬 | **Copenhagen** | "Shut up and calculate" |
+| 🌳 | **Many-Worlds** | "Everything that can happen does happen" |
+| 🎯 | **QBism** | "Quantum states are beliefs, not reality" |
+| 🧭 | **Bohmian Mechanics** | "Particles have positions. Always." |
+| 🔗 | **Relational QM** | "No view from nowhere" |
 
-Design choices:
+## Features
 
-Answers shuffled so position doesn't bias
-Each answer has a "tone" subtitle (e.g., "Bayesian," "bullet-biter") that helps people learn the vocabulary
-"No wrong answers (empirically equivalent, remember?)" as the footer
-"Collapse the Wavefunction Again" as the reset button
+- **10 questions** probing the philosophical axes that actually differentiate interpretations
+- **Simple Words mode** — toggle to rephrase everything using common vocabulary (~250 most common English words)
+- **Score distribution** showing your tendencies across all five interpretations
+- **Runner-up** interpretation for the philosophically promiscuous
+- **No wrong answers** — they're empirically equivalent, remember?
+
+## Why Simple Words?
+
+QM interpretations are genuinely accessible ideas locked behind jargon. The "Simple Words" toggle rephrases everything without dumbing it down:
+
+- "Ontology" → "what is really there"  
+- "Observer-independent facts" → "facts that are true for everyone the same way"
+- "Non-locality" → "things far away touching right away"
+
+Same concepts, no gatekeeping.
+
+## Deploy Your Own
+
+This is a single HTML file with no build step. To deploy:
+
+1. Fork this repo
+2. Go to Settings → Pages
+3. Set source to "main" branch
+4. Your quiz is live at `https://[username].github.io/qm-interpretation-quiz/`
+
+## Credits
+
+Built by [@svetimfm](https://twitter.com/svetimfm)
+
+The quiz probes real philosophical distinctions. For deeper reading:
+- **Copenhagen**: Bohr, Heisenberg
+- **Many-Worlds**: Everett, David Deutsch, Sean Carroll
+- **QBism**: Fuchs, Schack, Mermin
+- **Bohmian**: Bohm, Bell, Goldstein
+- **Relational**: Rovelli
+
+## License
+
+MIT — do whatever you want with it.
+
+---
+
+*"All these interpretations give the same experimental predictions. None is 'right' in a testable way. Your choice reflects philosophical temperament as much as physics. That's not a bug — it's one of the deepest features of our current understanding."*

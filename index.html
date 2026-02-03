@@ -1,0 +1,864 @@
+import React, { useState } from 'react';
+
+const questions = [
+  {
+    id: 1,
+    question: "A tree falls in a forest with no one around. What's your take?",
+    questionSimple: "A tree falls in a forest. No one is there. What do you think?",
+    answers: [
+      { 
+        text: "It falls. Obviously. The world doesn't need me.", 
+        textSimple: "It falls. Of course. The world does not need me to watch.",
+        interpretation: "bohmian", 
+        tone: "impatient realist",
+        toneSimple: "of course it's real"
+      },
+      { 
+        text: "It falls in every possible way, in different branches of reality.", 
+        textSimple: "It falls in every way it could fall — all of them happen, in different worlds.",
+        interpretation: "manyworlds", 
+        tone: "cosmic shrug",
+        toneSimple: "everything happens"
+      },
+      { 
+        text: "'Falling' only means something relative to other things.", 
+        textSimple: "'Falling' only means something when you say what it falls next to.",
+        interpretation: "relational", 
+        tone: "philosopher at the bar",
+        toneSimple: "it depends on what you compare it to"
+      },
+      { 
+        text: "The question isn't meaningful until someone checks.", 
+        textSimple: "The question has no answer until someone goes to look.",
+        interpretation: "copenhagen", 
+        tone: "pragmatist",
+        toneSimple: "just look and see"
+      },
+      { 
+        text: "The question is about my beliefs, not the tree.", 
+        textSimple: "This question is about what I think, not about the tree.",
+        interpretation: "qbism", 
+        tone: "epistemically careful",
+        toneSimple: "it's about what I know"
+      }
+    ]
+  },
+  {
+    id: 2,
+    question: "What do you want most from a scientific theory?",
+    questionSimple: "What do you want most from a way to understand the world?",
+    answers: [
+      { 
+        text: "Correct predictions. Everything else is decoration.", 
+        textSimple: "I want it to tell me what will happen. That is all that matters.",
+        interpretation: "copenhagen", 
+        tone: "engineer energy",
+        toneSimple: "just make it work"
+      },
+      { 
+        text: "A clear picture of what's actually there.", 
+        textSimple: "I want to know what is really there, clearly.",
+        interpretation: "bohmian", 
+        tone: "classical soul",
+        toneSimple: "show me what's real"
+      },
+      { 
+        text: "Mathematical elegance, even if the ontology gets weird.", 
+        textSimple: "I want it to be beautiful in its form, even if the world it shows is strange.",
+        interpretation: "manyworlds", 
+        tone: "bullet-biter",
+        toneSimple: "beauty matters more than comfort"
+      },
+      { 
+        text: "A better way to navigate my experience.", 
+        textSimple: "I want it to help me move through my life better.",
+        interpretation: "qbism", 
+        tone: "pragmatic idealist",
+        toneSimple: "help me live"
+      },
+      { 
+        text: "Understanding how things relate to each other.", 
+        textSimple: "I want to know how things are joined to other things.",
+        interpretation: "relational", 
+        tone: "process thinker",
+        toneSimple: "how things connect"
+      }
+    ]
+  },
+  {
+    id: 3,
+    question: "You flip a coin and cover it. Before you look — is the outcome determined?",
+    questionSimple: "You turn over a coin and cover it. Before you look — is the answer already there?",
+    answers: [
+      { 
+        text: "Yes. I just don't know it yet.", 
+        textSimple: "Yes. It is already one way. I just don't know which.",
+        interpretation: "bohmian", 
+        tone: "hidden certainty",
+        toneSimple: "the answer is already there"
+      },
+      { 
+        text: "Both outcomes happen. I'm about to branch.", 
+        textSimple: "Both happen. The world is about to become two worlds.",
+        interpretation: "manyworlds", 
+        tone: "cosmically chill",
+        toneSimple: "both happen"
+      },
+      { 
+        text: "My uncertainty IS the relevant state right now.", 
+        textSimple: "Right now, my not-knowing IS the important thing.",
+        interpretation: "qbism", 
+        tone: "beliefs are real",
+        toneSimple: "not-knowing is real"
+      },
+      { 
+        text: "Determined relative to what? The coin? Me? The room?", 
+        textSimple: "Already there for who? The coin? Me? The room? You have to say.",
+        interpretation: "relational", 
+        tone: "everything's contextual",
+        toneSimple: "you have to say for who"
+      },
+      { 
+        text: "The question isn't well-formed until I look.", 
+        textSimple: "The question does not make sense until I look.",
+        interpretation: "copenhagen", 
+        tone: "operationalist",
+        toneSimple: "ask again after you look"
+      }
+    ]
+  },
+  {
+    id: 4,
+    question: "What's the weirdest thing you're willing to accept?",
+    questionSimple: "What is the strangest thing you would say is true?",
+    answers: [
+      { 
+        text: "Infinite parallel realities, constantly branching.", 
+        textSimple: "There are more worlds than anyone can count, and more are made every moment.",
+        interpretation: "manyworlds", 
+        tone: "ontological maximalist",
+        toneSimple: "so many worlds"
+      },
+      { 
+        text: "Instantaneous influences across the universe (but no signaling).", 
+        textSimple: "Things far away can change each other right now, with no time in between.",
+        interpretation: "bohmian", 
+        tone: "non-local but orderly",
+        toneSimple: "far things touch"
+      },
+      { 
+        text: "That there are no observer-independent facts.", 
+        textSimple: "There are no facts that are true for everyone the same way.",
+        interpretation: "relational", 
+        tone: "perspectivalist",
+        toneSimple: "no facts for everyone"
+      },
+      { 
+        text: "Fundamental limits on what we can know. Full stop.", 
+        textSimple: "Some things we can never know. That is just how it is.",
+        interpretation: "copenhagen", 
+        tone: "epistemic humility",
+        toneSimple: "some things we cannot know"
+      },
+      { 
+        text: "That 'reality' is always reality-for-someone.", 
+        textSimple: "What is real is always real for someone. There is no 'real for no one.'",
+        interpretation: "qbism", 
+        tone: "agent-centric",
+        toneSimple: "real is always real for someone"
+      }
+    ]
+  },
+  {
+    id: 5,
+    question: "Someone presents you with a paradox. Your first instinct?",
+    questionSimple: "Someone shows you something that seems to go against itself. What do you think first?",
+    answers: [
+      { 
+        text: "The question is probably malformed.", 
+        textSimple: "The question is probably made wrong.",
+        interpretation: "copenhagen", 
+        tone: "suspicious of puzzles",
+        toneSimple: "bad question"
+      },
+      { 
+        text: "Look for the hidden variable they're ignoring.", 
+        textSimple: "Look for the thing they are not seeing.",
+        interpretation: "bohmian", 
+        tone: "there's always a mechanism",
+        toneSimple: "something is hidden"
+      },
+      { 
+        text: "Expand the frame until the paradox dissolves.", 
+        textSimple: "Make the picture bigger until the problem goes away.",
+        interpretation: "manyworlds", 
+        tone: "bigger picture",
+        toneSimple: "think bigger"
+      },
+      { 
+        text: "Ask what it means for the person presenting it.", 
+        textSimple: "Ask what this means for the person who brought it to me.",
+        interpretation: "qbism", 
+        tone: "whose paradox is it",
+        toneSimple: "whose problem is this"
+      },
+      { 
+        text: "Ask: paradoxical relative to what perspective?", 
+        textSimple: "Ask: a problem when seen from where?",
+        interpretation: "relational", 
+        tone: "context matters",
+        toneSimple: "seen from where"
+      }
+    ]
+  },
+  {
+    id: 6,
+    question: "How do you feel about randomness?",
+    questionSimple: "How do you feel about things that happen for no reason?",
+    answers: [
+      { 
+        text: "It's not real. It's just ignorance of deeper causes.", 
+        textSimple: "It is not real. We just do not see what makes things happen.",
+        interpretation: "bohmian", 
+        tone: "determinist heart",
+        toneSimple: "there is always a reason"
+      },
+      { 
+        text: "It's real, but it branches rather than collapses.", 
+        textSimple: "It is real, but all the things that could happen do happen, in different places.",
+        interpretation: "manyworlds", 
+        tone: "all outcomes happen",
+        toneSimple: "all ways happen"
+      },
+      { 
+        text: "It's a feature of my knowledge, not the world.", 
+        textSimple: "It is about what I do not know, not about how the world is.",
+        interpretation: "qbism", 
+        tone: "Bayesian",
+        toneSimple: "it's about what I know"
+      },
+      { 
+        text: "It's irreducible. Accept it and move on.", 
+        textSimple: "It is just there. You cannot break it down more. Accept it.",
+        interpretation: "copenhagen", 
+        tone: "pragmatic acceptance",
+        toneSimple: "just accept it"
+      },
+      { 
+        text: "Randomness relative to what? Context matters.", 
+        textSimple: "For no reason when seen from where? You have to say.",
+        interpretation: "relational", 
+        tone: "no absolutes",
+        toneSimple: "depends who is looking"
+      }
+    ]
+  },
+  {
+    id: 7,
+    question: "At a dinner party, someone asks what you 'really believe.' You say:",
+    questionSimple: "At a dinner, someone asks what you really think is true. You say:",
+    answers: [
+      { 
+        text: "'Believe' is too strong. I have useful models.", 
+        textSimple: "'Think is true' is too much to say. I have good ways to guess what will happen.",
+        interpretation: "copenhagen", 
+        tone: "anti-metaphysical",
+        toneSimple: "I just have good guesses"
+      },
+      { 
+        text: "I believe there's a definite world, we just can't see all of it.", 
+        textSimple: "I think there is one real world, we just cannot see all of it.",
+        interpretation: "bohmian", 
+        tone: "realist",
+        toneSimple: "there is one real world"
+      },
+      { 
+        text: "I believe everything that can happen does happen.", 
+        textSimple: "I think everything that can happen does happen, somewhere.",
+        interpretation: "manyworlds", 
+        tone: "multiverse-pilled",
+        toneSimple: "everything happens"
+      },
+      { 
+        text: "Beliefs are all we have. That's not a bug.", 
+        textSimple: "What we think is all we have. That is not a problem.",
+        interpretation: "qbism", 
+        tone: "epistemically honest",
+        toneSimple: "thinking is all we have"
+      },
+      { 
+        text: "I believe reality is made of relations, not things.", 
+        textSimple: "I think the world is made of how things are joined, not the things themselves.",
+        interpretation: "relational", 
+        tone: "process philosophy",
+        toneSimple: "it's about connections"
+      }
+    ]
+  },
+  {
+    id: 8,
+    question: "What's your relationship with 'common sense'?",
+    questionSimple: "How do you feel about what 'everyone knows'?",
+    answers: [
+      { 
+        text: "It's a good starting point. Reality should make sense.", 
+        textSimple: "It is a good place to start. The world should make sense.",
+        interpretation: "bohmian", 
+        tone: "intuition-preserving",
+        toneSimple: "the world should make sense"
+      },
+      { 
+        text: "It's fine for everyday life, but nature isn't obligated to be intuitive.", 
+        textSimple: "It is good for every day, but the world does not have to feel right to us.",
+        interpretation: "copenhagen", 
+        tone: "pragmatic split",
+        toneSimple: "nature doesn't have to make sense"
+      },
+      { 
+        text: "I'll sacrifice it for a unified, elegant picture.", 
+        textSimple: "I will give it up if I can get one beautiful, whole way of seeing.",
+        interpretation: "manyworlds", 
+        tone: "coherence over comfort",
+        toneSimple: "beauty over comfort"
+      },
+      { 
+        text: "Common sense is just shared beliefs. Nothing special.", 
+        textSimple: "What 'everyone knows' is just what most people think. It is not special.",
+        interpretation: "qbism", 
+        tone: "deflationary",
+        toneSimple: "just what people think"
+      },
+      { 
+        text: "Common sense assumes a view from nowhere. There isn't one.", 
+        textSimple: "What 'everyone knows' acts like there is a place where no one stands to look from. There is no such place.",
+        interpretation: "relational", 
+        tone: "perspectival",
+        toneSimple: "there is no view from nowhere"
+      }
+    ]
+  },
+  {
+    id: 9,
+    question: "The measurement problem is...",
+    questionSimple: "The question of why looking at things changes them is...",
+    answers: [
+      { 
+        text: "Not a problem. Just predict and move on.", 
+        textSimple: "Not a problem. Just say what will happen and move on.",
+        interpretation: "copenhagen", 
+        tone: "dissolve don't solve",
+        toneSimple: "not a real problem"
+      },
+      { 
+        text: "Solved: all outcomes occur, no collapse needed.", 
+        textSimple: "Already answered: all things that could happen do happen. Nothing breaks down.",
+        interpretation: "manyworlds", 
+        tone: "problem eliminated",
+        toneSimple: "already answered"
+      },
+      { 
+        text: "A sign that we're missing hidden structure.", 
+        textSimple: "A sign that there is something we do not see yet.",
+        interpretation: "bohmian", 
+        tone: "incompleteness",
+        toneSimple: "we are missing something"
+      },
+      { 
+        text: "A confusion about what quantum states represent.", 
+        textSimple: "A mix-up about what these ideas are about. They are about what we think, not things.",
+        interpretation: "qbism", 
+        tone: "it's about beliefs",
+        toneSimple: "we are confused about what this means"
+      },
+      { 
+        text: "Asking the wrong question. Measurement is just interaction.", 
+        textSimple: "The wrong question. Looking at something is just two things touching.",
+        interpretation: "relational", 
+        tone: "reframe it",
+        toneSimple: "wrong question"
+      }
+    ]
+  },
+  {
+    id: 10,
+    question: "Schrödinger's cat is...",
+    questionSimple: "The cat that is said to be alive and dead at the same time is...",
+    answers: [
+      { 
+        text: "A warning that got mistaken for a description.", 
+        textSimple: "A warning that people took as a true picture.",
+        interpretation: "copenhagen", 
+        tone: "Schrödinger's actual point",
+        toneSimple: "it was a warning"
+      },
+      { 
+        text: "Both alive and dead, in different branches. Sorry.", 
+        textSimple: "Alive in one world, dead in another. Both are real.",
+        interpretation: "manyworlds", 
+        tone: "embrace the weird",
+        toneSimple: "both are true"
+      },
+      { 
+        text: "Definitely one or the other. We just don't know.", 
+        textSimple: "One or the other, for sure. We just do not know which.",
+        interpretation: "bohmian", 
+        tone: "common sense preserved",
+        toneSimple: "one or the other"
+      },
+      { 
+        text: "A statement about my uncertainty, not the cat.", 
+        textSimple: "About what I do not know. Not about the cat.",
+        interpretation: "qbism", 
+        tone: "it's epistemology",
+        toneSimple: "about my not-knowing"
+      },
+      { 
+        text: "Alive relative to one system, dead relative to another.", 
+        textSimple: "Alive when seen from here, dead when seen from there.",
+        interpretation: "relational", 
+        tone: "no absolute facts",
+        toneSimple: "depends where you look from"
+      }
+    ]
+  }
+];
+
+const interpretations = {
+  copenhagen: {
+    name: "Copenhagen",
+    emoji: "🔬",
+    tagline: "Shut up and calculate",
+    taglineSimple: "Just do the work and see what happens",
+    description: "You're a pragmatist. The math works. Predictions succeed. Why demand more? You find metaphysical speculation about 'what's really happening' to be somewhere between pointless and meaningless. The wavefunction is a tool for prediction, not a description of reality. When Bohr said 'there is no quantum world,' you nodded.",
+    descriptionSimple: "You care about what works. The numbers work. They tell us what will happen. Why ask for more? Thinking about 'what is really there' seems like a waste of time to you. The math is a tool, not a picture of the world. You are happy to use the tool and not ask what it means.",
+    strengths: "You won't get lost in untestable speculation. You respect the limits of what science can tell us. You're productive.",
+    strengthsSimple: "You will not get lost in thinking about things you cannot test. You know what we can and cannot learn. You get things done.",
+    tensions: "Critics say you're dodging the question. 'It works' isn't an explanation. You've made peace with mystery by declaring it off-limits.",
+    tensionsSimple: "Some say you are not answering the question. 'It works' is not the same as 'I understand.' You have made the hard questions go away by saying they cannot be asked.",
+    philosophers: "Bohr, Heisenberg, and most working physicists who don't think about foundations.",
+    philosophersSimple: "Bohr, Heisenberg, and most people who do this work every day.",
+    youMightAlsoLike: "Wittgenstein's 'whereof one cannot speak, thereof one must be silent.'",
+    youMightAlsoLikeSimple: "The idea that some things cannot be said, and we should not try to say them."
+  },
+  manyworlds: {
+    name: "Many-Worlds",
+    emoji: "🌳",
+    tagline: "Everything that can happen does happen",
+    taglineSimple: "All things that could happen do happen",
+    description: "You're a bullet-biter. The math says superposition, so you accept superposition — all the way up. No collapse, no special role for measurement, no ad-hoc additions. Just the Schrödinger equation, uninterrupted. The price? Infinite branching realities. You find this elegant, not absurd.",
+    descriptionSimple: "You take the ideas all the way. The math says things can be two ways at once, so you say: yes, they are two ways at once. Nothing breaks down. Nothing special happens when we look. The price? More worlds than you can count, always growing. You think this is beautiful, not strange.",
+    strengths: "Mathematically minimal. No collapse postulate needed. Deterministic at the universal level. Takes quantum mechanics literally.",
+    strengthsSimple: "The math is simple. Nothing breaks down. At the biggest level, everything follows from what came before. You take the ideas at their word.",
+    tensions: "Where do probabilities come from if everything happens? Why do we experience one branch? You're trading one mystery for another.",
+    tensionsSimple: "If everything happens, why do some things seem more likely? Why do we only see one world? You may have traded one hard question for another.",
+    philosophers: "Everett, David Deutsch, Sean Carroll. The 'maximize elegance, damn the ontology' crowd.",
+    philosophersSimple: "Everett, David Deutsch, Sean Carroll. People who want the most beautiful idea, even if it seems strange.",
+    youMightAlsoLike: "Modal realism (David Lewis). If you're already accepting infinite branches, why not infinite possible worlds?",
+    youMightAlsoLikeSimple: "The idea that every way things could be is a real place (David Lewis). If you already have many worlds, why not all possible worlds?"
+  },
+  qbism: {
+    name: "QBism",
+    emoji: "🎯",
+    tagline: "Quantum states are beliefs, not reality",
+    taglineSimple: "These ideas are about what we think, not what is there",
+    description: "You think quantum mechanics is about agents and their expectations, not the world in itself. The wavefunction represents your beliefs, updated by experience. 'Collapse' is just belief revision. This isn't solipsism — there's a real world — but quantum theory describes your interface with it, not it.",
+    descriptionSimple: "You think these ideas are about people and what they expect to happen, not about the world by itself. The math shows what you think will happen, and you change what you think when you see new things. This does not mean the world is not real — just that this way of thinking is about how you meet the world, not what the world is.",
+    strengths: "Dissolves measurement problem elegantly. Takes seriously that science is done by agents. No spooky collapse or infinite worlds.",
+    strengthsSimple: "The hard question about looking at things goes away. It takes seriously that people are the ones doing the looking. No strange breaking down of things, no countless worlds.",
+    tensions: "Critics say you've given up on physics describing reality. If the wavefunction is just belief, what's causing those beliefs to update?",
+    tensionsSimple: "Some say you have given up on understanding what is really there. If the math is just about what you think, what is making you change what you think?",
+    philosophers: "Fuchs, Schack, Mermin. William James and pragmatism more broadly.",
+    philosophersSimple: "Fuchs, Schack, Mermin. And William James, who cared about what works for people.",
+    youMightAlsoLike: "Bayesian epistemology. Phenomenology. Anything that centers the agent.",
+    youMightAlsoLikeSimple: "Ways of thinking that put the person at the center. How we come to know things. How we live through things."
+  },
+  bohmian: {
+    name: "Bohmian Mechanics",
+    emoji: "🧭",
+    tagline: "Particles have positions. Always.",
+    taglineSimple: "Things are always somewhere. Always.",
+    description: "You want your physics to describe a clear, definite reality. Particles have positions at all times, guided by a pilot wave. Randomness is just ignorance of initial conditions. You've preserved determinism and common sense — at the cost of accepting non-local influences.",
+    descriptionSimple: "You want to know what is really there, and you want it to be clear. Things are always in one place, moved by a wave we cannot see. What looks like chance is just us not knowing where things started. You keep the idea that everything follows from what came before — but you have to accept that things far away can touch each other right away.",
+    strengths: "Clear ontology. Deterministic. No measurement problem — measurement just reveals pre-existing values. Mathematically equivalent to standard QM.",
+    strengthsSimple: "A clear picture of what is there. Everything follows from what came before. Looking at things just shows what was already true. The math gives the same answers as other ways.",
+    tensions: "Non-locality is conspicuous. Extending to quantum field theory is hard. Many physicists find the pilot wave ad-hoc.",
+    tensionsSimple: "Things far away touching right away is strange and hard to accept. Making this work for harder problems is not easy. Many people think the hidden wave feels made up.",
+    philosophers: "Bohm, Bell, Goldstein, Durr. Einstein's 'God does not play dice' energy.",
+    philosophersSimple: "Bohm, Bell, Goldstein, Durr. Einstein, who did not like chance being real.",
+    youMightAlsoLike: "Spinoza. Clear, deterministic, everything follows from the structure of reality.",
+    youMightAlsoLikeSimple: "Spinoza. A thinker who wanted everything to follow clearly from how things are."
+  },
+  relational: {
+    name: "Relational QM",
+    emoji: "🔗",
+    tagline: "No view from nowhere",
+    taglineSimple: "There is no place where no one stands",
+    description: "You think 'the state of the system' is always 'the state of the system relative to some other system.' There are no absolute, observer-independent facts — just facts-for-observers. This isn't about consciousness; a rock can be an observer. Reality is made of relations, not substances.",
+    descriptionSimple: "You think 'how things are' is always 'how things are when seen from somewhere.' There are no facts that are true for everyone the same way — just facts for this or that thing that is looking. This is not about minds; a rock can be a looker too. The world is made of how things are joined, not the things themselves.",
+    strengths: "Dissolves measurement problem by denying there's a single 'outcome.' Philosophically rigorous. Compatible with relativity's lesson that simultaneity is relative.",
+    strengthsSimple: "The hard question goes away because there is no one answer. Carefully thought through. Works well with other ideas about how time and space work differently for different lookers.",
+    tensions: "Hard to swallow: my facts aren't your facts? How do we have consistent experiences? Some find it vertiginous.",
+    tensionsSimple: "Hard to accept: what is true for me is not what is true for you? How do we all seem to see the same world? Some people feel like they are falling when they think about this.",
+    philosophers: "Rovelli, and in spirit: Leibniz, Whitehead, process philosophy broadly.",
+    philosophersSimple: "Rovelli. And older thinkers like Leibniz and Whitehead, who thought the world was made of happenings, not things.",
+    youMightAlsoLike: "Buddhist dependent origination. Structural realism. Anything that says relations are prior to relata.",
+    youMightAlsoLikeSimple: "Ideas from far away that say nothing is by itself — everything is because of other things. Ways of thinking that put connections before the things connected."
+  }
+};
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+export default function QMQuiz() {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [scores, setScores] = useState({
+    copenhagen: 0,
+    manyworlds: 0,
+    qbism: 0,
+    bohmian: 0,
+    relational: 0
+  });
+  const [showResult, setShowResult] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [shuffledQuestions] = useState(() => 
+    questions.map(q => ({ ...q, answers: shuffle(q.answers) }))
+  );
+  const [started, setStarted] = useState(false);
+  const [simpleMode, setSimpleMode] = useState(false);
+
+  const handleAnswer = (interpretation) => {
+    setSelectedAnswer(interpretation);
+    
+    setTimeout(() => {
+      const newScores = { ...scores };
+      newScores[interpretation] += 1;
+      setScores(newScores);
+      
+      if (currentQuestion < shuffledQuestions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedAnswer(null);
+      } else {
+        setShowResult(true);
+      }
+    }, 300);
+  };
+
+  const getResult = () => {
+    const maxScore = Math.max(...Object.values(scores));
+    const topInterpretations = Object.entries(scores)
+      .filter(([_, score]) => score === maxScore)
+      .map(([interp, _]) => interp);
+    return topInterpretations[0];
+  };
+
+  const getRunnerUp = () => {
+    const result = getResult();
+    const remaining = Object.entries(scores)
+      .filter(([interp, _]) => interp !== result)
+      .sort((a, b) => b[1] - a[1]);
+    return remaining[0]?.[0];
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestion(0);
+    setScores({ copenhagen: 0, manyworlds: 0, qbism: 0, bohmian: 0, relational: 0 });
+    setShowResult(false);
+    setSelectedAnswer(null);
+    setStarted(false);
+  };
+
+  const ToggleSwitch = () => (
+    <div className="flex items-center gap-3 justify-center mb-6">
+      <span className={`text-sm transition-colors ${!simpleMode ? 'text-purple-300' : 'text-slate-500'}`}>
+        Standard
+      </span>
+      <button
+        onClick={() => setSimpleMode(!simpleMode)}
+        className={`relative w-14 h-7 rounded-full transition-colors duration-200 ${
+          simpleMode ? 'bg-green-600' : 'bg-slate-600'
+        }`}
+        aria-label="Toggle simple language mode"
+      >
+        <div
+          className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 shadow-md ${
+            simpleMode ? 'translate-x-8' : 'translate-x-1'
+          }`}
+        />
+      </button>
+      <span className={`text-sm transition-colors ${simpleMode ? 'text-green-300' : 'text-slate-500'}`}>
+        Simple Words
+      </span>
+    </div>
+  );
+
+  if (!started) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full bg-slate-800/50 backdrop-blur rounded-2xl p-8 shadow-2xl border border-purple-500/20">
+          <h1 className="text-4xl font-bold text-center mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            {simpleMode ? "What Do You Think About How Small Things Work?" : "What's Your QM Interpretation?"}
+          </h1>
+          <p className="text-purple-300/80 text-center mb-6 text-lg">
+            {simpleMode 
+              ? "A fun way to find out what you think about hard questions"
+              : "A Buzzfeed quiz for people who think about the measurement problem"
+            }
+          </p>
+          
+          <ToggleSwitch />
+          
+          <div className="bg-slate-900/50 rounded-xl p-6 mb-8">
+            {simpleMode ? (
+              <>
+                <p className="text-slate-300 mb-4">
+                  We have a way to understand very small things. The math works. It tells us what will happen. 
+                  But what does it <em className="text-purple-300">mean</em>?
+                </p>
+                <p className="text-slate-300 mb-4">
+                  Does the math show what is really there, or just what we think? Does looking at things change them, 
+                  show what was already true, or make more worlds? Is chance real, or do we just not know enough?
+                </p>
+                <p className="text-slate-300">
+                  Smart people do not agree. This will not give you the answer — but it might help you find what you think.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-slate-300 mb-4">
+                  Quantum mechanics works. The math predicts experimental outcomes with extraordinary precision. 
+                  But what does it <em className="text-purple-300">mean</em>?
+                </p>
+                <p className="text-slate-300 mb-4">
+                  Does the wavefunction describe reality, or just our knowledge? Does measurement create outcomes, 
+                  reveal them, or branch the universe? Is randomness fundamental or just ignorance?
+                </p>
+                <p className="text-slate-300">
+                  Physicists disagree. Philosophers disagree. This quiz won't settle it — but it might help you 
+                  find your people.
+                </p>
+              </>
+            )}
+          </div>
+
+          <div className="grid grid-cols-5 gap-2 mb-8">
+            {Object.entries(interpretations).map(([key, interp]) => (
+              <div key={key} className="text-center">
+                <div className="text-2xl mb-1">{interp.emoji}</div>
+                <div className="text-xs text-slate-400">{interp.name}</div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setStarted(true)}
+            className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl text-white font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-purple-500/25"
+          >
+            {simpleMode ? "Find Out What You Think →" : "Find Your Interpretation →"}
+          </button>
+          
+          <p className="text-slate-500 text-center mt-4 text-sm">
+            {simpleMode 
+              ? "10 questions • 2 minutes • No wrong answers (all ways of thinking give the same numbers)"
+              : "10 questions • 2 minutes • No wrong answers (empirically equivalent, remember?)"
+            }
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (showResult) {
+    const result = getResult();
+    const runnerUp = getRunnerUp();
+    const interpretation = interpretations[result];
+    const secondary = interpretations[runnerUp];
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 py-8">
+        <div className="max-w-2xl mx-auto">
+          <ToggleSwitch />
+          
+          <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 shadow-2xl border border-purple-500/20 mb-6">
+            <div className="text-center mb-6">
+              <div className="text-6xl mb-4">{interpretation.emoji}</div>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                {simpleMode ? `You think like: ${interpretation.name}` : `You're ${interpretation.name}`}
+              </h2>
+              <p className="text-xl text-purple-300 italic">
+                "{simpleMode ? interpretation.taglineSimple : interpretation.tagline}"
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-purple-400 font-semibold mb-2">
+                  {simpleMode ? "What You Think" : "The Vibe"}
+                </h3>
+                <p className="text-slate-300">
+                  {simpleMode ? interpretation.descriptionSimple : interpretation.description}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-purple-400 font-semibold mb-2">
+                  {simpleMode ? "What Is Good About This" : "Why This Works"}
+                </h3>
+                <p className="text-slate-300">
+                  {simpleMode ? interpretation.strengthsSimple : interpretation.strengths}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-purple-400 font-semibold mb-2">
+                  {simpleMode ? "What Is Hard About This" : "The Tensions"}
+                </h3>
+                <p className="text-slate-300">
+                  {simpleMode ? interpretation.tensionsSimple : interpretation.tensions}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-purple-400 font-semibold mb-2">
+                  {simpleMode ? "People Who Think This Way" : "Your People"}
+                </h3>
+                <p className="text-slate-300">
+                  {simpleMode ? interpretation.philosophersSimple : interpretation.philosophers}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-purple-400 font-semibold mb-2">
+                  {simpleMode ? "Other Ideas You Might Like" : "You Might Also Like"}
+                </h3>
+                <p className="text-slate-300">
+                  {simpleMode ? interpretation.youMightAlsoLikeSimple : interpretation.youMightAlsoLike}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {runnerUp && scores[runnerUp] > 0 && (
+            <div className="bg-slate-800/30 backdrop-blur rounded-xl p-6 mb-6 border border-slate-600/20">
+              <h3 className="text-slate-400 font-semibold mb-2">
+                {simpleMode ? "You also think a bit like" : "Runner-up"}: {secondary.emoji} {secondary.name}
+              </h3>
+              <p className="text-slate-400 text-sm italic">
+                "{simpleMode ? secondary.taglineSimple : secondary.tagline}"
+              </p>
+              <p className="text-slate-500 text-sm mt-2">
+                {simpleMode 
+                  ? `You have some ${secondary.name} in you too. You could read about both.`
+                  : `You've got some ${secondary.name.toLowerCase()} tendencies too. Maybe read up on both.`
+                }
+              </p>
+            </div>
+          )}
+
+          <div className="bg-slate-800/30 backdrop-blur rounded-xl p-6 mb-6 border border-slate-600/20">
+            <h3 className="text-slate-400 font-semibold mb-3">
+              {simpleMode ? "How You Answered" : "Your Score Distribution"}
+            </h3>
+            <div className="space-y-2">
+              {Object.entries(scores)
+                .sort((a, b) => b[1] - a[1])
+                .map(([interp, score]) => (
+                  <div key={interp} className="flex items-center gap-3">
+                    <span className="text-lg">{interpretations[interp].emoji}</span>
+                    <span className="text-slate-400 w-24 text-sm">{interpretations[interp].name}</span>
+                    <div className="flex-1 bg-slate-700 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500"
+                        style={{ width: `${(score / questions.length) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-slate-500 text-sm w-8">{score}/{questions.length}</span>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
+            <h3 className="text-slate-400 font-semibold mb-2">
+              {simpleMode ? "One More Thing" : "Remember"}
+            </h3>
+            <p className="text-slate-500 text-sm">
+              {simpleMode 
+                ? "All these ways of thinking give the same answers when we test them. None is 'right' in a way we can check. What you chose says something about how you like to think, as much as about the world. That is not bad — it is one of the deepest things about what we know so far."
+                : "All these interpretations give the same experimental predictions. None is 'right' in a testable way. Your choice reflects philosophical temperament as much as physics. That's not a bug — it's one of the deepest features of our current understanding."
+              }
+            </p>
+          </div>
+
+          <button
+            onClick={resetQuiz}
+            className="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded-xl text-slate-300 font-medium transition-all duration-200"
+          >
+            {simpleMode ? "Try Again ↺" : "Collapse the Wavefunction Again ↺"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const question = shuffledQuestions[currentQuestion];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full">
+        <ToggleSwitch />
+        
+        <div className="flex justify-between items-center mb-6">
+          <span className="text-purple-400 text-sm">
+            {simpleMode 
+              ? `Question ${currentQuestion + 1} of ${shuffledQuestions.length}`
+              : `Question ${currentQuestion + 1} of ${shuffledQuestions.length}`
+            }
+          </span>
+          <div className="flex gap-1">
+            {shuffledQuestions.map((_, i) => (
+              <div 
+                key={i} 
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  i < currentQuestion ? 'bg-purple-500' : 
+                  i === currentQuestion ? 'bg-pink-500' : 'bg-slate-600'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 shadow-2xl border border-purple-500/20">
+          <h2 className="text-2xl font-semibold text-white mb-8">
+            {simpleMode ? question.questionSimple : question.question}
+          </h2>
+
+          <div className="space-y-3">
+            {question.answers.map((answer, index) => (
+              <button
+                key={index}
+                onClick={() => handleAnswer(answer.interpretation)}
+                disabled={selectedAnswer !== null}
+                className={`w-full text-left p-4 rounded-xl transition-all duration-200 border ${
+                  selectedAnswer === answer.interpretation
+                    ? 'bg-purple-600 border-purple-400 text-white'
+                    : 'bg-slate-700/50 border-slate-600/50 text-slate-200 hover:bg-slate-700 hover:border-purple-500/50'
+                } ${selectedAnswer !== null && selectedAnswer !== answer.interpretation ? 'opacity-50' : ''}`}
+              >
+                <span className="block">{simpleMode ? answer.textSimple : answer.text}</span>
+                <span className="block text-sm mt-1 opacity-60 italic">
+                  {simpleMode ? answer.toneSimple : answer.tone}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
